@@ -76,14 +76,14 @@
             flex-direction: column;
             gap: 12px;
             padding: 10px;
-            animation: scroll-y 45s linear infinite;
+            animation: scroll-y 50s linear infinite;
         }
         .comments-track:hover {
             animation-play-state: paused;
         }
         @keyframes scroll-y {
             0% { transform: translateY(100%); }
-            100% { transform: translateY(-150%); }
+            100% { transform: translateY(-180%); }
         }
         .comment-card {
             background: rgba(255, 255, 255, 0.05);
@@ -145,7 +145,7 @@
         <!-- Action Links -->
         <div class="space-y-3 px-2">
             
-            <!-- 1. Smart Review -->
+            <!-- 1. Smart Review (Now with Random 50+ Comment Generator) -->
             <button onclick="triggerSmartScan()" class="smart-review-btn w-full text-black font-bold py-4 rounded-xl text-sm uppercase tracking-wider flex items-center justify-between px-6 transition-transform active:scale-95">
                 <div class="flex items-center gap-3">
                     <i class="fab fa-google text-lg bg-white p-1.5 rounded-full text-black"></i>
@@ -153,7 +153,7 @@
                 </div>
                 <i class="fas fa-chevron-right text-black/60"></i>
             </button>
-            <p id="scan-status" class="text-green-400 text-xs text-center font-mono hidden bg-black/50 py-2 rounded">Review Copied! Opening Google...</p>
+            <p id="scan-status" class="text-green-400 text-xs text-center font-mono hidden bg-black/50 py-2 rounded shadow-lg border border-green-500/20">Unique Review Copied! Opening Google...</p>
 
             <!-- 2. Direct WhatsApp -->
             <a href="https://wa.me/919032208086" target="_blank" class="glass-btn w-full py-3.5 rounded-xl flex items-center justify-between px-6 text-white hover:border-green-500 group">
@@ -232,13 +232,68 @@
 
         <!-- Footer -->
         <div class="mt-10 text-center border-t border-gray-800/50 pt-6">
-            <p class="text-[10px] text-gray-500 font-mono tracking-widest">SMART SCAN ARCHITECTURE V3.0</p>
+            <p class="text-[10px] text-gray-500 font-mono tracking-widest">SMART SCAN ARCHITECTURE V4.0</p>
             <p class="text-[10px] text-gray-600 mt-2">© 2026 Syed Zeeshaan Ali</p>
         </div>
     </div>
 
     <!-- Logic Scripts -->
     <script>
+        // The Master Database of 50+ High-Energy Reviews
+        const masterReviewDatabase = [
+            "Syed Zeeshaan Ali and his team provided an incredible experience. The technology, high-fledged engineering, and digital solutions are unmatched. Highly professional and absolutely top-tier service. I highly recommend them!",
+            "Absolutely mind-blowing tech! 🔥 Zeeshaan's systems are flawless.",
+            "Highly recommended! Best developer in Telangana hands down.",
+            "The level of engineering here is IIT-grade. Just wow! 🚀", 
+            "Game changer for my business! 5 stars aren't enough.",
+            "Top-tier digital solutions. Very professional and fast.",
+            "Syed Zeeshaan Ali is a genius! The automation is next level.",
+            "Incredible UI/UX. The Smart Scan is brilliant.",
+            "Fastest service I've ever experienced. 10/10!",
+            "Transformational tech. Completely upgraded our workflow.",
+            "Absolutely stellar work! 🌟 Highly skilled team.",
+            "Unmatched quality and dedication. Keep it up!",
+            "The best investment my business ever made.", 
+            "Super energetic and brilliant developer!",
+            "Flawless execution! Everything works perfectly.",
+            "Zero bugs, high speed. Amazing coding skills! 💻",
+            "He took our digital presence to the absolute top.",
+            "Highly reliable and incredibly smart architecture.",
+            "Best tech agency in Khammam, no doubt! 🏆",
+            "Visionary systems! Simply phenomenal.",
+            "Perfect blend of entrepreneurship and coding.",
+            "A true tech mastermind. Delivered beyond expectations.",
+            "Smooth, fast, and extremely secure systems.",
+            "Can't believe how easy the Smart Scan is. Mind blown! 🤯",
+            "Exceptional quality. Everything is pixel perfect.",
+            "Syed Zeeshaan Ali sets the industry standard.",
+            "I'm obsessed with this tech! Brilliant work.",
+            "Next generation digital solutions right here.",
+            "Highest recommendation! Very talented developer.",
+            "They understand business and tech perfectly.",
+            "Fast, reliable, and super high-tech. ⚡",
+            "Incredible ROI since we integrated their systems.",
+            "The QR routing system is pure magic.",
+            "Brilliant mind, brilliant tech. 5/5 stars!",
+            "You won't find better engineering anywhere else.",
+            "Completely modernized our operations. Huge thanks!",
+            "Absolute perfection in every line of code.",
+            "Unbelievable speed and efficiency. Great job!",
+            "Syed Zeeshaan Ali is leading the future of tech. 🌍",
+            "Super professional and high-profile work.",
+            "Every business needs these digital solutions.",
+            "Top notch! The architecture is incredibly robust.",
+            "Phenomenal results. Couldn't be happier!",
+            "World-class development right from Khammam.",
+            "Highly optimized and zero error coding. Impressive!",
+            "A true visionary in the tech space. 🚀",
+            "Automated everything for us. Incredible service.",
+            "The best digital marketing and tech combo out there.",
+            "Superb interface, flawless backend.",
+            "Absolutely killed it with the new system build!",
+            "Syed Zeeshaan Ali never disappoints. 100% success rate."
+        ];
+
         // 1. Dynamic Background Crossfader (20 Seconds)
         document.addEventListener("DOMContentLoaded", () => {
             const slides = document.querySelectorAll('.bg-slide');
@@ -250,37 +305,16 @@
                 slides[currentSlide].classList.add('active');
             }, 20000); // 20 seconds exactly
             
-            generateComments();
+            generateVisualComments();
         });
 
-        // 2. 50+ High-Energy Auto-Generated Comments Generator
-        function generateComments() {
-            const commentsData = [
-                "Absolutely mind-blowing tech! 🔥 Zeeshaan's systems are flawless.", "Highly recommended! Best developer in Telangana hands down.", "The level of engineering here is IIT-grade. Just wow! 🚀", 
-                "Game changer for my business! 5 stars aren't enough.", "Top-tier digital solutions. Very professional and fast.", "Syed Zeeshaan Ali is a genius! The automation is next level.",
-                "Incredible UI/UX. The Smart Scan is brilliant.", "Fastest service I've ever experienced. 10/10!", "Transformational tech. Completely upgraded our workflow.",
-                "Absolutely stellar work! 🌟 Highly skilled team.", "Unmatched quality and dedication. Keep it up!", "The best investment my business ever made.", 
-                "Super energetic and brilliant developer!", "Flawless execution! Everything works perfectly.", "Zero bugs, high speed. Amazing coding skills! 💻",
-                "He took our digital presence to the absolute top.", "Highly reliable and incredibly smart architecture.", "Best tech agency in Khammam, no doubt! 🏆",
-                "Visionary systems! Simply phenomenal.", "Perfect blend of entrepreneurship and coding.", "A true tech mastermind. Delivered beyond expectations.",
-                "Smooth, fast, and extremely secure systems.", "Can't believe how easy the Smart Scan is. Mind blown! 🤯", "Exceptional quality. Everything is pixel perfect.",
-                "Syed Zeeshaan Ali sets the industry standard.", "I'm obsessed with this tech! Brilliant work.", "Next generation digital solutions right here.",
-                "Highest recommendation! Very talented developer.", "They understand business and tech perfectly.", "Fast, reliable, and super high-tech. ⚡",
-                "Incredible ROI since we integrated their systems.", "The QR routing system is pure magic.", "Brilliant mind, brilliant tech. 5/5 stars!",
-                "You won't find better engineering anywhere else.", "Completely modernized our operations. Huge thanks!", "Absolute perfection in every line of code.",
-                "Unbelievable speed and efficiency. Great job!", "Syed Zeeshaan Ali is leading the future of tech. 🌍", "Super professional and high-profile work.",
-                "Every business needs these digital solutions.", "Top notch! The architecture is incredibly robust.", "Phenomenal results. Couldn't be happier!",
-                "World-class development right from Khammam.", "Highly optimized and zero error coding. Impressive!", "A true visionary in the tech space. 🚀",
-                "Automated everything for us. Incredible service.", "The best digital marketing and tech combo out there.", "Superb interface, flawless backend.",
-                "Absolutely killed it with the new system build!", "Syed Zeeshaan Ali never disappoints. 100% success rate."
-            ];
-
+        // 2. Populate the Live Scrolling Visual Comments
+        function generateVisualComments() {
             const firstNames = ["Rahul", "Priya", "Amit", "Sneha", "Vikram", "Anjali", "Rohan", "Neha", "Karthik", "Pooja", "Suresh", "Divya", "Arjun", "Meera", "Manoj", "Riya"];
             const container = document.getElementById('comments-container');
 
-            // Generate HTML for all 50 comments
             let commentsHTML = '';
-            commentsData.forEach(text => {
+            masterReviewDatabase.forEach(text => {
                 const randomName = firstNames[Math.floor(Math.random() * firstNames.length)] + " " + ["K.", "S.", "R.", "M.", "V.", "P."][Math.floor(Math.random() * 6)];
                 commentsHTML += `
                     <div class="comment-card">
@@ -293,20 +327,22 @@
                 `;
             });
             
-            // Duplicate to create a seamless infinite loop illusion
+            // Duplicate HTML to create a seamless infinite scroll loop
             container.innerHTML = commentsHTML + commentsHTML;
         }
 
-        // 3. Smart Scan Auto-Review System
+        // 3. Smart Scan Auto-Review Engine (Randomized on Tap)
         function triggerSmartScan() {
-            const reviewText = "Syed Zeeshaan Ali and his team provided an incredible experience. The technology, high-fledged engineering, and digital solutions are unmatched. Highly professional and absolutely top-tier service. I highly recommend them!";
+            // Selects a random comment from the master array every time the button is clicked
+            const randomReviewText = masterReviewDatabase[Math.floor(Math.random() * masterReviewDatabase.length)];
+            
             const googleReviewLink = "https://g.page/r/CUkqqszymeVcEBI/review";
             const btnText = document.getElementById('btn-text');
             const status = document.getElementById('scan-status');
             
             btnText.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Generating...';
 
-            navigator.clipboard.writeText(reviewText).then(() => {
+            navigator.clipboard.writeText(randomReviewText).then(() => {
                 setTimeout(() => {
                     btnText.innerHTML = 'Review Copied! Paste on Google';
                     status.classList.remove('hidden');
