@@ -392,10 +392,14 @@
                 
                 // Keep main button disabled so they are forced to click the final Blue Google Button inside the reply box
                 mainBtn.style.opacity = "0.7";
-
-            } catch (err) {
-                // 4. Fallback: If AI Fetch fails, instantly redirect to Google so you don't lose the review
-                window.location.href = googleReviewLink;
+} catch (err) {
+                // Show us the exact error!
+                alert("Connection Error: " + err.message);
+                console.log(err);
+                
+                // Keep the button active so we can try again
+                mainBtn.style.pointerEvents = 'auto'; 
+                btnText.innerHTML = 'Post a 5-Star Review';
             }
         }
     </script>
