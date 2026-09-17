@@ -145,15 +145,24 @@
         <!-- Action Links -->
         <div class="space-y-3 px-2">
             
-            <!-- 1. Smart Review (Now with Random 50+ Comment Generator) -->
-            <button onclick="triggerSmartScan()" class="smart-review-btn w-full text-black font-bold py-4 rounded-xl text-sm uppercase tracking-wider flex items-center justify-between px-6 transition-transform active:scale-95">
+            <!-- 1. Smart Review with AI Auto-Reply Integration -->
+            <button id="main-review-btn" onclick="triggerSmartScan()" class="smart-review-btn w-full text-black font-bold py-4 rounded-xl text-sm uppercase tracking-wider flex items-center justify-between px-6 transition-transform active:scale-95">
                 <div class="flex items-center gap-3">
                     <i class="fab fa-google text-lg bg-white p-1.5 rounded-full text-black"></i>
                     <span id="btn-text">Post a 5-Star Review</span>
                 </div>
                 <i class="fas fa-chevron-right text-black/60"></i>
             </button>
-            <p id="scan-status" class="text-green-400 text-xs text-center font-mono hidden bg-black/50 py-2 rounded shadow-lg border border-green-500/20">Unique Review Copied! Opening Google...</p>
+            <p id="scan-status" class="text-green-400 text-xs text-center font-mono hidden bg-black/50 py-2 rounded shadow-lg border border-green-500/20">Unique Review Copied! Generating AI Reply...</p>
+
+            <!-- NEW: Hidden AI Reply Box -->
+            <div id="ai-reply-box" class="hidden mt-4 glass-btn rounded-xl p-5 border border-yellow-500/30 relative">
+                <div class="absolute -top-3 left-4 bg-black px-2 text-[10px] text-yellow-500 font-mono tracking-widest border border-yellow-500/30 rounded">AI INSTANT REPLY</div>
+                <p id="ai-reply-text" class="text-sm text-gray-200 italic leading-relaxed mt-2"></p>
+                <a id="final-google-btn" href="https://g.page/r/CUkqqszymeVcEBI/review" target="_blank" class="mt-5 block w-full text-center bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 rounded-lg text-sm transition shadow-lg">
+                    <i class="fab fa-google mr-2"></i> Open Google to Paste Review
+                </a>
+            </div>
 
             <!-- 2. Direct WhatsApp -->
             <a href="https://wa.me/919032208086" target="_blank" class="glass-btn w-full py-3.5 rounded-xl flex items-center justify-between px-6 text-white hover:border-green-500 group">
@@ -303,7 +312,7 @@
                 slides[currentSlide].classList.remove('active');
                 currentSlide = (currentSlide + 1) % slides.length;
                 slides[currentSlide].classList.add('active');
-            }, 20000); // 20 seconds exactly
+            }, 20000); 
             
             generateVisualComments();
         });
@@ -327,37 +336,67 @@
                 `;
             });
             
-            // Duplicate HTML to create a seamless infinite scroll loop
             container.innerHTML = commentsHTML + commentsHTML;
         }
 
-        // 3. Smart Scan Auto-Review Engine (Randomized on Tap)
-        function triggerSmartScan() {
-            // Selects a random comment from the master array every time the button is clicked
+        // 3. UPDATED Smart Scan Auto-Review Engine (Now Connects to AI Backend)
+        async function triggerSmartScan() {
+            // Pick random review and set elements
             const randomReviewText = masterReviewDatabase[Math.floor(Math.random() * masterReviewDatabase.length)];
-            
-            const googleReviewLink = "https://g.page/r/CUkqqszymeVcEBI/review";
             const btnText = document.getElementById('btn-text');
             const status = document.getElementById('scan-status');
+            const aiReplyBox = document.getElementById('ai-reply-box');
+            const aiReplyText = document.getElementById('ai-reply-text');
+            const mainBtn = document.getElementById('main-review-btn');
+            const googleReviewLink = "https://g.page/r/CUkqqszymeVcEBI/review";
             
-            btnText.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Generating...';
+            // UI Update: Loading State
+            btnText.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Fetching AI Reply...';
+            status.classList.remove('hidden');
+            mainBtn.style.pointerEvents = 'none'; // Prevent double-clicking
 
-            navigator.clipboard.writeText(randomReviewText).then(() => {
-                setTimeout(() => {
-                    btnText.innerHTML = 'Review Copied! Paste on Google';
-                    status.classList.remove('hidden');
-                    
-                    setTimeout(() => {
-                        window.location.href = googleReviewLink;
-                        setTimeout(() => {
-                            btnText.innerHTML = 'Post a 5-Star Review';
-                            status.classList.add('hidden');
-                        }, 1000);
-                    }, 1500);
-                }, 500);
-            }).catch(err => {
+            // 1. Copy review to clipboard instantly
+            try {
+                await navigator.clipboard.writeText(randomReviewText);
+            } catch(err) {
+                console.log("Clipboard write failed, but proceeding...");
+            }
+
+            // 2. Fetch AI Reply from Google Apps Script
+            try {
+                const scriptURL = "https://script.google.com/macros/s/AKfycbyeTpPdY4dF0p_yhMh7U3SgqAFov7I781KlyZhq1M4cj8qv7GpYvIMGbb9QEnhI-Zi0/exec"; 
+                
+                const payload = {
+                    phone: "SmartScanUser", // Default placeholder for this specific fast-flow
+                    reviewText: randomReviewText,
+                    stars: 5,
+                    businessName: "High-Fledged Engineering And Digital Tech Solutions",
+                    businessType: "digital tech agency",
+                    ownerPhone: "919032208086"
+                };
+
+                const response = await fetch(scriptURL, {
+                    method: 'POST',
+                    body: JSON.stringify(payload)
+                });
+                
+                const data = await response.json();
+
+                // 3. Display AI Reply and Change Button State
+                aiReplyText.innerText = `"${data.aiReply}"`;
+                aiReplyBox.classList.remove('hidden');
+                
+                btnText.innerHTML = '<i class="fas fa-check-circle mr-2"></i> Review Copied!';
+                status.innerText = "Reply generated successfully. Click below to post.";
+                status.classList.replace('text-green-400', 'text-yellow-400');
+                
+                // Keep main button disabled so they are forced to click the final Blue Google Button inside the reply box
+                mainBtn.style.opacity = "0.7";
+
+            } catch (err) {
+                // 4. Fallback: If AI Fetch fails, instantly redirect to Google so you don't lose the review
                 window.location.href = googleReviewLink;
-            });
+            }
         }
     </script>
 </body>
